@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -27,6 +28,13 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
         //param da camera
         Camera.Parameters params = c.getParameters();
 
+        //Configuracao do aspeto da camara em outros dispositivos
+        List<Camera.Size> sizes = params.getSupportedPictureSizes();
+        Camera.Size mSize=null;
+
+        for( Camera.Size size:sizes){
+            mSize=size;
+        }
         //trocar a orientaçao da camera
         if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
             params.set("orientation", "portrait");
@@ -38,6 +46,7 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
             params.setRotation(0);
         }
 
+        params.setPictureSize(mSize.width,mSize.height);
         c.setParameters(params);
         try {
             c.setPreviewDisplay(holder);
@@ -47,7 +56,7 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
         }
 
 }
-    
+
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -56,6 +65,7 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        c.stopPreview();
+        c.release();
     }
 }

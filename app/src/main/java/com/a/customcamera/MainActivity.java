@@ -22,5 +22,6 @@ public class MainActivity extends AppCompatActivity {
         //abrir a camera
         camera = Camera.open();
         showCamera = new  ShowCamera(this,camera);
+        fl.addView(showCamera);
     }
 }
